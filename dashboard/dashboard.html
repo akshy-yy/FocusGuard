@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FocusGuard Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>FocusGuard</h1>
+
+<div class="card">
+
+<input
+id="website"
+placeholder="website.com"
+/>
+
+<select id="duration">
+
+<option value="30">
+30 Minutes
+</option>
+
+<option value="60">
+1 Hour
+</option>
+
+<option value="120">
+2 Hours
+</option>
+
+<option value="240">
+4 Hours
+</option>
+
+</select>
+
+<button id="addBtn">
+Add Website
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Blocked Websites</h2>
+
+<ul id="websiteList"></ul>
+
+</div>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>
