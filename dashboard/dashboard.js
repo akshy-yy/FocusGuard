@@ -23,7 +23,7 @@ function addSite(){
         return;
 
     const duration =
-    Number(durationSelect.value);
+    Number(document.getElementById("minutes").value);
 
     const expiryTime =
     Date.now() +
@@ -38,6 +38,7 @@ function addSite(){
 
             sites.push({
                 website,
+                active: true,
                 expiryTime
             });
 
@@ -67,43 +68,97 @@ function loadSites(){
 
             websiteList.innerHTML = "";
 
-            sites.forEach(
-                (site,index) => {
+            sites.forEach((site,index)=>{
 
-                const li =
-                document.createElement("li");
+                const card =
+                document.createElement("div");
 
-                const deleteBtn =
-                document.createElement("button");
+                card.className =
+                "website-card";
 
-                deleteBtn.textContent =
-                "Delete";
+                const websiteText =
+                document.createElement("span");
 
-                deleteBtn.onclick =
-                () => {
+                websiteText.textContent =
+                site.website;
 
-                    sites.splice(
-                        index,
-                        1
-                    );
+                const toggle =
+                document.createElement("input");
+
+                toggle.type =
+                "checkbox";
+
+                toggle.checked =
+                site.active;
+
+                toggle.onchange = ()=>{
+
+                    if(toggle.checked){
+
+                        const minutes =
+                        prompt(
+                            "Block for how many minutes?"
+                        );
+
+                        if(!minutes){
+
+                            toggle.checked =
+                            false;
+
+                            return;
+
+                        }
+
+                        sites[index].active =
+                        true;
+
+                        sites[index].expiryTime =
+                        Date.now() +
+                        Number(minutes) *
+                        60 *
+                        1000;
+
+                    }
+
+                    else{
+
+                        sites[index].active =
+                        false;
+
+                    }
 
                     chrome.storage.local.set({
-                        blockedSites: sites
+                        blockedSites:sites
                     });
-
-                    loadSites();
 
                 };
 
-                li.textContent =
-                site.website;
+                const wrapper =
+                document.createElement("label");
 
-                li.appendChild(
-                    deleteBtn
+                wrapper.className =
+                "switch";
+
+                const slider =
+                document.createElement("span");
+
+                slider.className =
+                "slider";
+
+                wrapper.appendChild(toggle);
+
+                wrapper.appendChild(slider);
+
+                card.appendChild(
+                    websiteText
+                );
+
+                card.appendChild(
+                    wrapper
                 );
 
                 websiteList.appendChild(
-                    li
+                    card
                 );
 
             });

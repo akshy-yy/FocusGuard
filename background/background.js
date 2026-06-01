@@ -46,14 +46,11 @@ function checkSite(tab){
             const blocked =
             sites.find(site =>
 
-                hostname.includes(
-                    site.website
-                )
-
+                hostname.includes(site.website)
                 &&
-
-                now <
-                site.expiryTime
+                site.active
+                &&
+                now <site.expiryTime
 
             );
 
