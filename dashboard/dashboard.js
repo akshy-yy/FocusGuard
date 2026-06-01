@@ -1,17 +1,10 @@
 const websiteInput = document.getElementById("website");
-
 const durationSelect = document.getElementById("duration");
-
 const addBtn = document.getElementById("addBtn");
-
 const websiteList = document.getElementById("websiteList");
-
 const modalOverlay = document.getElementById("modalOverlay");
-
 const modalMinutes = document.getElementById("modalMinutes");
-
 const confirmModal = document.getElementById("confirmModal");
-
 const cancelModal = document.getElementById("cancelModal");
 
 let currentToggleIndex = null;
@@ -159,8 +152,7 @@ function loadSites(){
                             /1000
                         );
 
-                        timer.textContent =
-                        `${mins}m ${secs}s remaining`;
+                        updateCountdown(timer, site, toggle);
 
                     }
 
@@ -269,3 +261,36 @@ setInterval(()=>{
             }
         });
 },1000);
+
+function updateCountdown(timerElement, site, toggle){
+    const interval = setInterval(()=>{
+        const remaining = site.expiryTime -Date.now();
+        if(remaining <= 0){
+            clearInterval(interval);
+            timerElement.textContent = "Not blocked";
+            toggle.checked = false;
+            site.active = false;
+
+            chrome.storage.local.get(
+                ["blockedSites"],
+                result=>{
+
+                    const sites =
+                    result.blockedSites || [];
+
+                    chrome.storage.local.set({
+                        blockedSites:sites
+                    });
+
+                });
+
+            return;
+        }
+
+        const hrs = Math.floor(remaining/3600000);
+        const mins = Math.floor((remaining%3600000)/60000);
+        const secs = Math.floor((remaining%60000)/1000);
+        timerElement.textContent = `${hrs}h ${mins}m ${secs}s`;
+
+    },1000);
+}

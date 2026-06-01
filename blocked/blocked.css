@@ -18,3 +18,10 @@ body{
     backdrop-filter:blur(20px);
     border:1px solid rgba(255,255,255,0.1);
 }
+
+#blockedTimer{
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #c4b5fd;
+}

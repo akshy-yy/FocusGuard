@@ -1,15 +1,28 @@
 body{
-    width:250px;
-    padding:20px;
-    font-family:Arial;
+    width:280px;
+    padding:18px;
+    margin:0;
+    background:linear-gradient(135deg, #081120, #132238, #1e2f47);
+    font-family:Inter,sans-serif;
+    color:white;
 }
 
-.container{
+.popup-card{
+    padding:20px;
+    border-radius:22px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.08);
     text-align:center;
 }
 
 button{
     width:100%;
-    padding:10px;
+    margin-top:12px;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg, #8b5cf6, #a855f7);
+    color:white;
     cursor:pointer;
 }
