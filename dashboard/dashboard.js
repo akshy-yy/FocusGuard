@@ -175,12 +175,47 @@ function loadSites(){
                     slider
                 );
 
+                const deleteBtn = document.createElement("button");
+                deleteBtn.className = "delete-btn";
+
+                const deleteIcon = document.createElement("img");
+                deleteIcon.src = "../assets/delete.png";
+
+                deleteIcon.className = "delete-icon";
+                deleteBtn.appendChild(
+                    deleteIcon
+                );
+
+                deleteBtn.onclick =()=>{sites.splice(index, 1);
+
+                    chrome.storage.local.set(
+                        {
+                            blockedSites:sites
+                        },
+                        ()=>{
+                            loadSites();
+                        }
+                    );
+
+                };
+
+                const controls = document.createElement("div");
+                controls.className = "controls";
+
+                controls.appendChild(
+                    wrapper
+                );
+
+                controls.appendChild(
+                    deleteBtn
+                );
+
                 card.appendChild(
                     leftSide
                 );
 
                 card.appendChild(
-                    wrapper
+                    controls
                 );
 
                 websiteList.appendChild(

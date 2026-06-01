@@ -162,3 +162,35 @@ button:hover{
     color: #cbd5e1;
     margin-top: 4px;
 }
+
+.controls{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.delete-btn{
+    width:42px;
+    height:42px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:12px;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.delete-btn:hover{
+    transform: translateY(-2px);
+    background:rgba(255, 255, 255, 0.15);
+}
+
+.delete-icon{
+    width:18px;
+    height:18px;
+    object-fit:contain;
+    pointer-events:none;
+}
