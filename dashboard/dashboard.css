@@ -100,10 +100,11 @@ button:hover{
 .slider{
     position:absolute;
     inset:0;
-    background:#374151;
-    border-radius:999px;
-    transition:0.3s ease;
     cursor:pointer;
+    background:#2b3445;
+    background: 2px solid rgba(255,255,255,0.15);
+    border-radius:999px;
+    transition:0.3s;
 }
 
 .slider::before{
