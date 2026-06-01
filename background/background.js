@@ -34,21 +34,25 @@ function checkSite(tab){
             );
 
             if(blocked){
-
-                blocked.blockedUrl =
-                tab.url;
+                blocked.blockedUrl = tab.url;
 
                 chrome.storage.local.set({
                     blockedSites: sites
                 }, () => {
 
+                    const blockedPageUrl =
+                    chrome.runtime.getURL(
+                        "blocked/blocked.html"
+                    ) +
+                    "?site=" +
+                    encodeURIComponent(
+                        blocked.website
+                    );
+
                     chrome.tabs.update(
                         tab.id,
                         {
-                            url:
-                            chrome.runtime.getURL(
-                                "blocked/blocked.html"
-                            )
+                            url: blockedPageUrl
                         }
                     );
 

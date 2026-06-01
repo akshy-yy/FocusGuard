@@ -78,7 +78,8 @@ function loadSites(){
                 timer.className= "countdown";
 
                 websiteName.className = "website-name";
-                websiteName.textContent =site.website.replace("www.","").replace(".com","").replace(".in","");
+                const formattedName = site.website.replace("www.","").replace(".com","").replace(".in","");
+                websiteName.textContent= formattedName.charAt(0).toUpperCase()+formattedName.slice(1);
 
                 leftSide.appendChild(
                     logo
@@ -270,6 +271,7 @@ function updateCountdown(timerElement, site, toggle){
             timerElement.textContent = "Not blocked";
             toggle.checked = false;
             site.active = false;
+            loadSites();
 
             chrome.storage.local.get(
                 ["blockedSites"],
