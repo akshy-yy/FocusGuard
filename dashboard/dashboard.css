@@ -21,19 +21,27 @@ body{
     margin-bottom:24px;
 }
 
-input,
-select{
+input{
     width:100%;
-    padding:10px;
-    margin-bottom:10px;
+    padding:14px 18px;
+    border:none;
+    border-radius:14px;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    font-size:16px;
+    box-sizing:border-box;
+    margin-bottom:14px;
+    outline:none;
 }
 
 button{
-    background:linear-gradient(135deg,#7c3aed,#9333ea);
+    padding:14px 22px;
     border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg, #8b5cf6, #a855f7);
     color:white;
-    padding:12px 18px;
-    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
     cursor:pointer;
     transition:0.3s;
 }
@@ -46,54 +54,74 @@ button:hover{
     padding: 0;
 }
 
--website-card{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 10px;
+.website-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    padding:18px 20px;
+    border-radius:18px;
+    background:rgba(255, 255, 255, 0.05);
+    width: fit-content;
+    min-width: 350px;
+}
+
+.website-name{
+    font-size:20px;
+    font-weight:600;
+    color:white;
+}
+
+.website-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.site-logo{
+    width:24px;
+    height:24px;
+    border-radius:6px;
 }
 
 .switch{
-    position: relative;
-    width: 52px;
-    height: 28px;
+    position:relative;
+    width:60px;
+    height:32px;
+    flex-shrink:0;
 }
 
 .switch input{
-    display: none;
+    opacity:0;
+    width:0;
+    height:0;
 }
 
 .slider{
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #555;
-    border-radius: 20px;
-    transition: 0.3s;
+    position:absolute;
+    inset:0;
+    background:#374151;
+    border-radius:999px;
+    transition:0.3s ease;
+    cursor:pointer;
 }
 
-.slider:before{
-    content: "";
-    position: absolute;
-    width: 22px;
-    height:22px;
-    left:3px;
-    top:3px;
-    background:white;
+.slider::before{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    left:4px;
+    top:4px;
     border-radius:50%;
-    transition:0.3s;
+    background:white;
+    transition:0.3s ease;
 }
 
-input:checked+ .slider{
-    background: #4ade80;
+.switch input:checked + .slider{
+    background:#8b5cf6;
 }
 
-input:checked + .slider:before{
-    transform:translateX(24px);
+.switch input:checked + .slider::before{
+    transform:translateX(28px);
 }

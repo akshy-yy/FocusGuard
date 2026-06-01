@@ -76,11 +76,40 @@ function loadSites(){
                 card.className =
                 "website-card";
 
-                const websiteText =
+                const leftSide =
+                document.createElement("div");
+
+                leftSide.className =
+                "website-info";
+
+                const logo =
+                document.createElement("img");
+
+                logo.src =
+                `https://www.google.com/s2/favicons?domain=${site.website}&sz=64`;
+
+                logo.className =
+                "site-logo";
+
+                const websiteName =
                 document.createElement("span");
 
-                websiteText.textContent =
-                site.website;
+                websiteName.className =
+                "website-name";
+
+                websiteName.textContent =
+                site.website
+                    .replace("www.","")
+                    .replace(".com","")
+                    .replace(".in","");
+
+                leftSide.appendChild(
+                    logo
+                );
+
+                leftSide.appendChild(
+                    websiteName
+                );
 
                 const toggle =
                 document.createElement("input");
@@ -145,12 +174,16 @@ function loadSites(){
                 slider.className =
                 "slider";
 
-                wrapper.appendChild(toggle);
+                wrapper.appendChild(
+                    toggle
+                );
 
-                wrapper.appendChild(slider);
+                wrapper.appendChild(
+                    slider
+                );
 
                 card.appendChild(
-                    websiteText
+                    leftSide
                 );
 
                 card.appendChild(
