@@ -1,14 +1,20 @@
-const websiteInput =
-document.getElementById("website");
+const websiteInput = document.getElementById("website");
 
-const durationSelect =
-document.getElementById("duration");
+const durationSelect = document.getElementById("duration");
 
-const addBtn =
-document.getElementById("addBtn");
+const addBtn = document.getElementById("addBtn");
 
-const websiteList =
-document.getElementById("websiteList");
+const websiteList = document.getElementById("websiteList");
+
+const modalOverlay = document.getElementById("modalOverlay");
+
+const modalMinutes = document.getElementById("modalMinutes");
+
+const confirmModal = document.getElementById("confirmModal");
+
+const cancelModal = document.getElementById("cancelModal");
+
+let currentToggleIndex = null;
 
 loadSites();
 
@@ -16,18 +22,14 @@ addBtn.addEventListener("click", addSite);
 
 function addSite(){
 
-    const website =
-    websiteInput.value.trim();
+    const website = websiteInput.value.trim();
 
     if(!website)
         return;
 
-    const duration =
-    Number(document.getElementById("minutes").value);
+    const duration = Number(document.getElementById("minutes").value);
 
-    const expiryTime =
-    Date.now() +
-    duration * 60 * 1000;
+    const expiryTime = Date.now() + duration * 60 * 1000;
 
     chrome.storage.local.get(
         ["blockedSites"],
@@ -45,11 +47,8 @@ function addSite(){
             chrome.storage.local.set({
                 blockedSites: sites
             }, () => {
-
                 websiteInput.value = "";
-
                 loadSites();
-
             });
 
         }
@@ -70,38 +69,23 @@ function loadSites(){
 
             sites.forEach((site,index)=>{
 
-                const card =
-                document.createElement("div");
+                const card = document.createElement("div");
+                card.className = "website-card";
+                
+                const leftSide = document.createElement("div");
+                leftSide.className = "website-info";
 
-                card.className =
-                "website-card";
+                const logo = document.createElement("img");
+                logo.src = `https://www.google.com/s2/favicons?domain=${site.website}&sz=64`;
+                logo.className = "site-logo";
 
-                const leftSide =
-                document.createElement("div");
+                const websiteName = document.createElement("span");
+                
+                const timer= document.createElement("div");
+                timer.className= "countdown";
 
-                leftSide.className =
-                "website-info";
-
-                const logo =
-                document.createElement("img");
-
-                logo.src =
-                `https://www.google.com/s2/favicons?domain=${site.website}&sz=64`;
-
-                logo.className =
-                "site-logo";
-
-                const websiteName =
-                document.createElement("span");
-
-                websiteName.className =
-                "website-name";
-
-                websiteName.textContent =
-                site.website
-                    .replace("www.","")
-                    .replace(".com","")
-                    .replace(".in","");
+                websiteName.className = "website-name";
+                websiteName.textContent =site.website.replace("www.","").replace(".com","").replace(".in","");
 
                 leftSide.appendChild(
                     logo
@@ -109,6 +93,10 @@ function loadSites(){
 
                 leftSide.appendChild(
                     websiteName
+                );
+
+                leftSide.appendChild(
+                    timer
                 );
 
                 const toggle =
@@ -124,35 +112,25 @@ function loadSites(){
 
                     if(toggle.checked){
 
-                        const minutes =
-                        prompt(
-                            "Block for how many minutes?"
-                        );
+                        currentToggleIndex = index;
+                        modalOverlay.classList.remove("hidden");
+                        toggle.checked = false;
 
                         if(!minutes){
-
                             toggle.checked =
                             false;
-
                             return;
-
                         }
 
-                        sites[index].active =
-                        true;
+                        sites[index].active = true;
 
-                        sites[index].expiryTime =
-                        Date.now() +
-                        Number(minutes) *
-                        60 *
-                        1000;
+                        sites[index].expiryTime = Date.now() + Number(minutes) *60 *1000;
 
                     }
 
                     else{
 
-                        sites[index].active =
-                        false;
+                        sites[index].active = false;
 
                     }
 
@@ -162,17 +140,39 @@ function loadSites(){
 
                 };
 
-                const wrapper =
-                document.createElement("label");
+                if(site.active){
 
-                wrapper.className =
-                "switch";
+                    const remaining =
+                    site.expiryTime -
+                    Date.now();
 
-                const slider =
-                document.createElement("span");
+                    if(remaining > 0){
 
-                slider.className =
-                "slider";
+                        const mins =
+                        Math.floor(
+                            remaining / 60000
+                        );
+
+                        const secs =
+                        Math.floor(
+                            (remaining % 60000)
+                            /1000
+                        );
+
+                        timer.textContent =
+                        `${mins}m ${secs}s remaining`;
+
+                    }
+
+                }
+
+                const wrapper = document.createElement("label");
+
+                wrapper.className = "switch";
+
+                const slider = document.createElement("span");
+
+                slider.className = "slider";
 
                 wrapper.appendChild(
                     toggle
@@ -200,3 +200,72 @@ function loadSites(){
     );
 
 }
+
+confirmModal.onclick = ()=>{
+
+    const minutes = Number(modalMinutes.value);
+
+    if(!minutes || currentToggleIndex === null)
+        return;
+
+    chrome.storage.local.get(
+        ["blockedSites"],
+        result=>{
+            const sites = result.blockedSites || [];
+            sites[currentToggleIndex].active = true;
+            sites[currentToggleIndex].expiryTime = Date.now() + minutes *60 * 1000;
+            chrome.storage.local.set({
+                blockedSites:sites
+            },()=>{
+
+                modalOverlay.classList.add(
+                    "hidden"
+                );
+
+                modalMinutes.value = "";
+
+                currentToggleIndex = null;
+
+                loadSites();
+
+            });
+
+        }
+    );
+
+};
+
+cancelModal.onclick = ()=>{
+
+    modalOverlay.classList.add(
+        "hidden"
+    );
+
+    modalMinutes.value = "";
+
+    currentToggleIndex = null;
+
+};
+
+setInterval(()=>{
+
+    chrome.storage.local.get(["blockedSites"],result=>{
+
+            const sites = result.blockedSites || [];
+            let changed = false;
+
+            sites.forEach(site=>{
+                if(site.active && Date.now() > site.expiryTime){
+                    site.active = false;
+                    changed = true;
+                }
+            });
+
+            if(changed){
+                chrome.storage.local.set({
+                    blockedSites:sites
+                });
+                loadSites();
+            }
+        });
+},1000);
