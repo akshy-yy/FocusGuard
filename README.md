@@ -1,4 +1,4 @@
-# FocusGuard
+# <img src="assets/img128.png" alt="FocusGuard Logo" width="40"> FocusGuard
 
 A personalised Chrome Extension that helps users block distracting websites and stay focused on their work by setting custom block durations and managing blocked websites through a modern dashboard.
 
