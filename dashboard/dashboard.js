@@ -124,12 +124,54 @@ function loadSites(){
 
                     else{
 
-                        sites[index].active = false;
+                        sites[index].active =
+                        false;
+
+                        chrome.tabs.query(
+                            {},
+                            tabs=>{
+
+                                tabs.forEach(tab=>{
+
+                                    if(
+                                        !tab.url
+                                    )
+                                        return;
+
+                                    const url =
+                                    new URL(tab.url);
+
+                                    const siteParam =
+                                    url.searchParams.get(
+                                        "site"
+                                    );
+
+                                    if(
+                                        siteParam ===
+                                        site.website
+                                    ){
+
+                                        chrome.tabs.update(
+                                            tab.id,
+                                            {
+                                                url:
+                                                site.blockedUrl
+                                            }
+                                        );
+
+                                    }
+
+                                });
+
+                            }
+                        );
 
                     }
 
                     chrome.storage.local.set({
                         blockedSites:sites
+                    }, ()=>{
+                        loadSites();
                     });
 
                 };
@@ -157,6 +199,9 @@ function loadSites(){
 
                     }
 
+                }
+                else{
+                    timer.textContent="";
                 }
 
                 const wrapper = document.createElement("label");
